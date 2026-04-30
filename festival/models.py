@@ -10,10 +10,10 @@ class Palco(models.Model):
     nome = models.CharField(max_length=100)
     capacidade = models.PositiveIntegerField(default=0)
     imagem = models.ImageField(upload_to="palcos/", null=True, blank=True)
+    acessibilidade_mobilidade_reduzida = models.BooleanField(default=False)
 
     def __str__(self):
         return self.nome
-
 
 class Dia(models.Model):
     data = models.DateField()
@@ -35,3 +35,4 @@ class Concerto(models.Model):
 
     def __str__(self):
         return f"{self.banda} - {self.dia}"
+

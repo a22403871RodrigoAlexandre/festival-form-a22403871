@@ -56,13 +56,29 @@ def apagar_concerto_view(request, concerto_id):
 
     return redirect('dias')
 
-def criar_concerto(request):
+def criar_concerto_view(request):
     if request.method == 'POST':
         form = ConcertoForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('lista_concertos') 
+            concerto = form.save()
+            return redirect('concerto', concerto_id=concerto.id)
     else:
         form = ConcertoForm()
 
-    return render(request, 'festival/criar_concerto.html', {'form': form})    
+    return render(request, 'festival/criar_concerto.html', {'form': form})
+
+def editar_palco_view(request, palco_id):
+    palco = get_object_or_404(Palco, id=palco_id)
+
+    if request.method == 'POST':
+        form = PalcoForm(request.POST, request.FILES, instance=palco)
+        if form.is_valid():
+            form.save()
+            return redirect('palcos')
+    else:
+        form = PalcoForm(instance=palco)
+
+    return render(request, 'festival/editar_palco.html', {
+        'form': form,
+        'palco': palco,
+    })
