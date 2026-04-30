@@ -7,7 +7,7 @@ def index_view(request):
     return render(request, 'festival/index.html')
 
 def dias_view(request):
-    dias = Dia.objects.all()
+    dias = Dia.objects.all().order_by('data')
 
     context = {'dias': dias}
 
@@ -47,3 +47,22 @@ def editar_concerto_view(request, concerto_id):
     }
 
     return render(request, 'festival/editar_concerto.html', context)
+
+def apagar_concerto_view(request, concerto_id):
+    concerto = get_object_or_404(Concerto, id=concerto_id)
+
+    if request.method == 'POST':
+        concerto.delete()
+
+    return redirect('dias')
+
+def criar_concerto(request):
+    if request.method == 'POST':
+        form = ConcertoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_concertos') 
+    else:
+        form = ConcertoForm()
+
+    return render(request, 'festival/criar_concerto.html', {'form': form})    
